@@ -3,9 +3,6 @@
 ## Introduction
 Understanding some core concepts of Javascript.
 
-ES6 includes the following new features:
-- [arrows](#arrows)
-
 ### Syntax Parser
 A program that reads your code and determines what it does and if its grammar is valid. The code you write isn't directly run on the computer, but there's that intermediate program between your code and your computer that translates your code into something the computer can understand. The JS engine on your browser does this. Reads your code and determines if it is valid. 
 
