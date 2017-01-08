@@ -634,7 +634,7 @@ console.log(john); //Person {  firstname: "John", lastname: "Doe" }
 The new keyword is an operator. When we say new, inmediately an empty object is created, and then it invokes the function. when the function is called we know that execution context generates for us a variable called 'this'. In the case where you use the keyword new, it changes to where the variable this points to and that's what's returned.
 
 ### Function Constructors
-A normal function that is used to construct objects. The 'this' variable points a new empty object, and that object is returne from the function automatically.
+A normal function that is used to construct objects. The 'this' variable points a new empty object, and that object is returned from the function automatically.
 
 ### Setting the prototype in function constructors
 When you use a function constructor, it already set the prototype for you. Function is an object, it can have a name, it has code which is invocable, and all functions has its prototype created as an empty object but it is never used unless you use the new keyword. The prototype is not the prototype of the function, it is the prototype of any objects created if your using the function as a constructor.
