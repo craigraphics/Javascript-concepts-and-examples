@@ -678,12 +678,36 @@ NaN === NaN // false
 
 ### CORS 
 Stands for Cross Origin Resource sharing. Allows you tu break the same origin policiy of a browser.
+The Origin header is always sent by the browser on a CORS request.
+The Acesss-Control-Allow-Origin header needs the be present on a CORS response to a GET request for the browser to allow a request to pass through.
+If we were making a POST CORS request, the OPTIONS HTTP request the browser sends first.
+Access-Control-Request-Method would be an acceptable response for the browser to allow the POST request
+
 
 ### JSONP
 It is a solution for the same-origin policy. It was created to retrieve from different domain. It only works with GET request. You get a response as a function.
-The Origin header is always sent by the browser on a CORS request.
-The  Acesss-Control-Allow-Origin header needs the be present on a CORS response to a GET request for the browser to allow a request to pass through?
-If we were making a POST CORS request, the OPTIONS HTTP request the browser sends first.
-Access-Control-Request-Method would be an acceptable response for the browser to allow the POST request
+
+### Event Bubbling & Event Capturing
+
+When you click on something, it's actually two phases that that event travels to. The first phase is the Capturing phase where the event travels from the root to the target (button), the second phase is the Bubbling phase in which the event travels back from the target to the root again. You can add event listeners that listen to that phases independently, the last parameter is a boolean, and if set true it listens for events on the capturing phase, if set to false it listens to the bubbling phase, as default is set to false (bubbling).
+
+```JavaScript
+var items = document.querySelectorAll('.item');
+items.forEach(function(item){
+  item.addEventListener('click', function (event) {
+    console.log(item.classList[0]);
+  }, true);
+});
+```
+
+### stopPropagation() & preventDefault()
+
+stopPropagation actually stops the event from either presiding down the capturing phase or going up the event bubbling phase and no listeners will be called after the event has called to stop propagating.
+
+preventDefault stops the default behavior that that event would have triggered in whatever element you performed the event on (link, checkbox, etc).
+
+
+
+
 
 
