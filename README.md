@@ -687,6 +687,41 @@ Access-Control-Request-Method would be an acceptable response for the browser to
 ### JSONP
 It is a solution for the same-origin policy. It was created to retrieve from different domain. It only works with GET request. You get a response as a function.
 
+
+-----
+
+### DOM
+
+DOM stands for Document Object Model. It is a JavaScript representation of the content of a webpage. It is a bunch of objects representing all the HTML and CSS of the webpage that you can interact with via JS. Each node inside the webpage gets converted by the browser into ojects, each with their own properties and methods, and they are assembled into a tree with different branches, each tree has a top piece which is called the root of the tree.
+
+
+### Methods to select the DOM
+
+getElementById, getElementsByTagName, getElementsByClassName, querySelector, querySelectorAll
+
+```JavaScript
+document.getElementById('id') // returns an oject with the same ID
+document.getElementsByTagName('tag') // returns a full collection of types of elements selected
+document.getElementsByClassName('class') // returns a collection of elements that contains the selected class
+document.querySelector(el) // returns a single element that is passed in a CSS selector
+document.querySelectorAll(el) // returns a collection of elements that are passed in a CSS selector
+```
+
+### Methods to manipulate the DOM
+
+classList, getAttribute(), setAttribute(), appendChild(), append(), prepend(), removeChild(), remove(), createElement, innerText, textContent, innnerHTML, value, parentElement, children, nextSibling, previousSibling, style,
+
+ ```JavaScript
+document.querySelector('h1').innerText // returns all the text in between the tags.
+document.querySelector('h1').innerText = 'new text' // sets new text inside the selected element.
+document.querySelector('h1').classList // returns a collection of classes contained inside the element.
+document.querySelector('h1').classList.add('new-class') // adds class to the collection inside the element.
+```
+
+### DOM events
+
+
+
 ### Event Bubbling & Event Capturing
 
 When you click on something, it's actually two phases that that event travels to. The first phase is the Capturing phase where the event travels from the root to the target (button), the second phase is the Bubbling phase in which the event travels back from the target to the root again. You can add event listeners that listen to that phases independently, the last parameter is a boolean, and if set true it listens for events on the capturing phase, if set to false it listens to the bubbling phase, as default is set to false (bubbling).
@@ -705,9 +740,5 @@ items.forEach(function(item){
 stopPropagation actually stops the event from either presiding down the capturing phase or going up the event bubbling phase and no listeners will be called after the event has called to stop propagating.
 
 preventDefault stops the default behavior that that event would have triggered in whatever element you performed the event on (link, checkbox, etc).
-
-
-
-
 
 
