@@ -462,6 +462,22 @@ tellMeWhenDone(function() {
 });
 ```
 
+### Promises
+A Promise is an object representing the eventual completition or failure of an asynchronous operation. We can attach callbacks to promises instead of passing them into a function. It has two parameters, resolve and reject which are functions. We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed. Every Promise has a then() method that will run if our promise is resolved. The catch() method will run if the promise is rejected.
+
+```JavaScript
+let myFirstPromise = new Promise((resolve, reject) => {
+  setTimeout( function() {
+    resolve("Success!");
+  }, 250) 
+}) 
+
+myFirstPromise.then((successMessage) => {
+  console.log("Yay! " + successMessage) // "Yay! Success!"
+});
+```
+
+
 ### Call() Apply() Bind()
 On each execution context we have a variable enviroment, outer enviroment and 'this'. This keyword can point the global object sometimes or can point the object that contains the function if the function is a method attach to an object. To be able to control what the this variable ends up meaining when the execution context is created.  All functions are objects and have access to methods call, apply bind.
 
@@ -720,7 +736,16 @@ document.querySelector('h1').classList.add('new-class') // adds class to the col
 
 ### DOM events
 
+addEventListener attaches any type of event listener (click, mouseover, drag, etc.), and will attach as many as we want to a given element.
 
+ ```JavaScript
+btn = document.querySelector('btn');
+btn.addEventListener('click', function(e) {
+	alert('clicked');
+	e.preventDefault();
+});
+```
+Each event passes an event object as a parameter that has access to different properties and methods.
 
 ### Event Bubbling & Event Capturing
 
