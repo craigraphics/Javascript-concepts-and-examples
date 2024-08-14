@@ -717,14 +717,34 @@ Strict mode introduces stricter parsing and error handling rules in JavaScript. 
 
 ## NaN (Not a Number)
 
-`NaN` is a special value in JavaScript that represents an invalid numerical operation.
+`NaN` (Not-a-Number) is a special value in JavaScript that represents an invalid numerical operation or an unrepresentable mathematical result.
 
-- **Checking for `NaN`:** Use `isNaN()` to check if a value is `NaN`.
+While JavaScript provides multiple ways to check if a value is not a number, the built-in `isNaN()` function should be used cautiously due to its potential for unexpected results. The primary issue with `isNaN()` is its implicit type coercion: it attempts to convert the argument to a number before checking if it's `NaN`. This behavior can lead to confusing outcomes:
 
-  ```javascript
-  console.log(isNaN(NaN)); // Output: true
-  console.log(isNaN(10)); // Output: false
-  ```
+```javascript
+console.log(isNaN("hello")); // true
+console.log(isNaN("")); // false (empty string is converted to 0)
+console.log(isNaN({})); // true
+```
+
+To address these inconsistencies, ECMAScript 6 (ES6) introduced `Number.isNaN()`, a more reliable method that doesn't perform type coercion:
+
+```javascript
+console.log(Number.isNaN(NaN)); // true
+console.log(Number.isNaN("hello")); // false
+console.log(Number.isNaN("")); // false
+console.log(Number.isNaN({})); // false
+```
+
+An alternative approach leverages a unique property of `NaN`: it's the only value in JavaScript that is not equal to itself. This characteristic allows for a simple self-comparison check:
+
+```javascript
+console.log(NaN !== NaN); // true
+
+// As a function:
+const isNaN = (value) => value !== value;
+```
+Both the self-comparison method `(value !== value)` and `Number.isNaN()` are reliable ways to check for `NaN`. 
 
 ## CORS (Cross-Origin Resource Sharing)
 
