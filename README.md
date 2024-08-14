@@ -1,769 +1,780 @@
-# Javascript core concepts 
+# JavaScript Core Concepts
 
 ## Introduction
-Understanding some core concepts of Javascript.
 
-### Syntax Parser
-A program that reads your code and determines what it does and if its grammar is valid. The code you write isn't directly run on the computer, but there's that intermediate program between your code and your computer that translates your code into something the computer can understand. The JS engine on your browser does this. Reads your code and determines if it is valid. 
+This document provides a comprehensive overview of core JavaScript concepts. Whether you're new to the language or looking to solidify your understanding, this guide covers essential topics with clear explanations and practical examples.
 
-### Lexical Environment
-Where something sits physically in the code you write.
+## Table of Contents
 
-### Execution Context
-A wrapper to help manage the code that is running.
-Two things are created by the JS engine: `Global Object` and `this`. In Execution Context `(Global) = Global object (window) = this`.
+- [Syntax Parser](#syntax-parser)
+- [Lexical Environment](#lexical-environment)
+- [Execution Context](#execution-context)
+- [Name/Value Pairs](#namevalue-pairs)
+- [Objects](#objects)
+- [Global Scope](#global-scope)
+- [Execution Context Creation](#execution-context-creation-creation-phase)
+- [JavaScript and undefined](#javascript-and-undefined)
+- [Execution Context (Code Execution)](#execution-context-code-execution)
+- [Single-Threaded, Synchronous Execution](#single-threaded-synchronous-exexution)
+- [Function Invocation and the Execution Stack](#function-invocation-and-the-execution-stack)
+- [Variable Environment](#variable-environment)
+- [The Scope Chain](#the-scope-chain)
+- [Scope](#scope)
+- [let in ES6](#let-in-es6)
+- [Asynchronous Callbacks](#asynchronous-callbacks)
+- [Dynamic Typing](#dynamic-typing)
+- [Primitive Types](#primitive-type)
+- [Operators](#operators)
+- [Operator Precedence](#operator-precedence)
+- [Operator Associativity](#operator-associativity)
+- [Coercion](#coercion)
+- [Default Values](#default-values)
+- [Objects and Functions](#objects-and-functions)
+- [First-Class Functions](#first-class-functions)
+- [Function Statements and Function Expressions](#function-statements-and-function-expressions)
+- [By Value vs. By Reference & Mutation](#by-value-vs-by-reference--mutate)
+- [Objects, Functions, and 'this'](#objects-functions-and-this)
+- [Arrays: Collections of Anything](#arrays-collections-of-anything)
+- [Arguments and Spread](#arguments-and-spread)
+- [Automatic Semicolon Insertion](#automatic-semicolon-insertion)
+- [Whitespace](#whitespace)
+- [IIFE: Immediately Invoked Function Expression](#iife-inmediately-invoked-function-expression)
+- [Closures](#closures)
+- [Function Factories and Closures](#function-factory-making-advantage-of-closures)
+- [Callback Functions](#callback-function)
+- [Promises](#promises)
+- [call(), apply(), and bind()](#call-apply-bind)
+- [Function Currying](#function-currying)
+- [Functional Programming](#functional-programming)
+- [Object-Oriented JavaScript and Prototypal Inheritance](#object-oriented-javascript-and-prototypical-inheritance)
+- [Inheritance](#inheritance)
+- [Prototype](#prototype)
+- [Everything is an Object (or a Primitive)](#everything-is-an-object-or-a-primitive)
+- [Reflection](#reflection)
+- [Function Constructors, 'new', and JavaScript History](#function-constructors-new-and-the-history-of-javascript)
+- [Setting the Prototype in Function Constructors](#setting-the-prototype-in-function-constructors)
+- [Strict Mode](#strict-mode)
+- [NaN (Not a Number)](#nan)
+- [CORS (Cross-Origin Resource Sharing)](#cors)
+- [JSONP (JSON with Padding)](#jsonp)
+- [DOM (Document Object Model)](#dom)
+- [Methods to Select DOM Elements](#methods-to-select-the-dom)
+- [Methods to Manipulate the DOM](#methods-to-manipulate-the-dom)
+- [DOM Events](#dom-events)
+- [Event Bubbling & Event Capturing](#event-bubbling--event-capturing)
+- [stopPropagation() & preventDefault()](#stoppropagation--preventdefault)
 
-### Name/Value Pair
-A name which maps to a unique value.
+## Syntax Parser
 
-### Object
-A collection of name value pairs.
+A syntax parser is a program that reads your JavaScript code and:
 
-### Global
-Not inside a Function
+1. **Determines its meaning:** It figures out what your code is instructing the computer to do.
+2. **Checks for valid grammar:** It ensures you've written code according to the rules of JavaScript syntax.
 
-### Execution Context is Created (Creation Phase) 
-`Global object`, `this` and an `Outer Environment` are created. Setup Memory Space for Variables and Functions which is known as "Hoisting". Function in its entirety is placed into memory space, however the next phase (execution) is when the assigments are set. Puts a placeholder as `undefined` to `variables`.
+Your code isn't directly understood by the computer. The JavaScript engine (like the one in your web browser) acts as an intermediary. It uses the syntax parser to translate your code into instructions the computer can execute.
 
-### Javascript and undefined
-First phase: `Global Oject`, `this`, `Outer Environment`, "Hoisting" variables setup (and set equal to 'undefined') and Functions Setup.
-`undefined` is a special value that Javascript has with init that mean that variable has not been set.
-If you don't set a variable name and try to call it you will get an uncaught reference error saying that the name is not defined. 
+## Lexical Environment
 
-### ### Execution Context (Code Execution)
-`Global object`, `this` and an `Outer Environment` already exist, and then the engine runs the code line by line, interpreting it and compiling it.
+The lexical environment refers to where code is physically located within your JavaScript file.  It determines variable and function visibility based on their position in the code structure.
 
-### ### Single Threaded, Synchronous exexution
-Single threaded means that one command is executed at a time. Synchronous meaning one at a time in the order it appears.
+## Execution Context
 
-### Function Invocation and The Execution Stack
-Invocation means running a function or calling a function by using parenthesis ()
-Execution Stack is one in top of the other in top of the other. Anytime you invoke a function, a new Execution Context is created and put on the Execution Stack, it will have its own space of functions and variables and will got through that creation space and execute line by line in the function. However if I have another function invocation its going to stop on that line on code an create another Execution Context and run that code.
-Every function invocation creates a new Execution Context, creation phase and runs line by line.
+An execution context is a wrapper created by the JavaScript engine each time a piece of code is executed. It manages the execution of that code. 
 
-### Variable Environment
-Where the variables live and how they relate to each other in memory.
+**Key components:**
 
-### The Scope Chain
-Every Execution Context has a reference to its Outer Environment. When you ask for a variable while running a line of code in any particular execution context, if it can't find that variable it will look at the outer reference and go look for variables there somewhere down below it in the execution stack and that outer reference where that points is going to depend on where the function sits lexically.
+- **Global Object:** In web browsers, this is the `window` object, providing access to global variables and functions.
+- **`this` keyword:**  Refers to the current execution context, which can change based on how a function is called.
 
-### Scope
-Is where a variable is available in your code and if it's truly the same variable or a new copy.
+**Relationship in the Global Execution Context:**
 
-### let in ES6
-Allow the Javascript engine to use the block scoping, so you can declare a variable and during the execution phase where its created, the variable is placed into memory and sets as undefined, however you will not be able to use it until the line of code is run during the execution phase that actually declares the variable. Its declared inside a block { }, its only available inside that block, true even for for loops.
+- In the global execution context, the `Global Object`, `window`, and `this` all refer to the same object.
 
-### Aynchronous callbacks
-Aynchronous means more than one at a time.
-When we are talking about the JS Engine we need to know that are other engines and pieces of code like the Rendering Engine or the HTTP Request that run Javascript. The Javascript Engine  has hooks where it can talk to the rendering engine or request data, but all that is running async in the browser but in Javascript it runs synchronously.
-The event Queue is a list that runs in the Javascript Engine, and this is full of notifications of events that are happening. When the browser somewhere outside the Javascript engine has an event that inside the Javascript Engine we want to notify of it gets placed on the Queue. The event Queue gets look only when the Execution Stack is empty. 
+## Name/Value Pairs
 
-```JavaScript
-/* example of an async callback, try clicking on the document when it loads and see what message comes first in the console.log*/
+In JavaScript, data is often organized as name/value pairs:
 
-// long running function
-function waitThreeSeconds() {
-    var ms = 3000 + new Date().getTime();
-    while (new Date() < ms){}
-    console.log('finished function');
-}
+- **Name:** A unique identifier for a value.
+- **Value:** The data associated with the name.
 
-function clickHandler() {
-    console.log('click event!');   
-}
+Example:
 
-// listen for the click event
-document.addEventListener('click', clickHandler);
-
-
-waitThreeSeconds();
-console.log('finished execution');
+```javascript
+let age = 30; // "age" is the name, "30" is the value
 ```
 
-### Dynamic Typing
-You don't tell the engine what type of data a variable holds, it figures it out while your code is running. Variables can hold different types of values because it's figured out during the execution.
+## Objects
 
-### Primitive Type
-A type of data that represents a single value. That is, not an object.
+Objects are collections of name/value pairs. They provide a way to structure data and represent real-world entities.
 
-There are six primitive types:
+Example:
 
-	- `undefined`: represents lack of existence (you shouldn't set a variable to this, javascript engine uses and sets this value)
-	- `null`: represents lack of existence (you can set a variable to this, javascript engine won't set this value ever)
-	- `boolean`: true or false
-	- `number`: floating point number (there's always some decimals).
-	- `string`: a sequence of characters both '' and "" can be used
-	- `symbol`:  used in ES6.
-
-### Operators
-A special function that is syntactically (written) differently. Generally, operators take two parameters and return one result. `(+, -, <, >, =.....)`
-
-```JavaScript
-prefix notation +3, 4
-infix notation 3 + 4
-postfix notation 3, 4+
+```javascript
+const user = {
+  firstName: "Alice", 
+  lastName: "Johnson", 
+  age: 25 
+};
 ```
 
-### Operator Precedence
-Which operator function gets called first. Functions are called in order of precedence. (Higher precedence wins). https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+## Global Scope
 
-```JavaScript
-var a = 3 + 5 * 4; // 23
-//'*' operator has a higher precedence and son is called before the '+' operator function.
+Code that resides outside of any function is said to be in the "global scope." Variables and functions declared in the global scope are accessible from anywhere within your JavaScript program.
+
+## Execution Context Creation (Creation Phase)
+
+Before JavaScript executes your code, it goes through a creation phase for each execution context. Here's what happens:
+
+1. **Creation of Global Object, `this`, and Outer Environment:** The JavaScript engine sets up these core components.
+2. **Hoisting:**
+   - **Variables:** Variables declared with `var` are "hoisted" to the top of their scope and initialized with a value of `undefined`.
+   - **Variables declared with `let` and `const`:** Are also hoisted to the top of their scope, BUT they are not initialized with any value. They are in a "Temporal Dead Zone" (TDZ) from the beginning of their scope until the line where they are declared is executed. Trying to access a `let` or `const` variable in its TDZ will result in a `ReferenceError`.
+   - **Functions:** Function declarations (not function expressions) are also hoisted, making them callable before their actual definition in the code.
+
+## JavaScript and undefined
+
+The special value `undefined` in JavaScript signifies that a variable has been declared but has not yet been assigned a value. It's essential to understand this concept to avoid unexpected behavior.
+
+**Example:**
+
+```javascript
+let myVariable;
+console.log(myVariable); // Output: undefined
 ```
 
-### Operator Associativity
-What order operator functions get called in: left-to-right or right-to-left. When function have the same precedence.
+Attempting to access a variable that has not been declared results in a `ReferenceError`.
 
-```JavaScript
-var a = 2, b = 3, c = 4;
-a = b = c;
-console.log(a) // 4 
-console.log(b) // 4  
-console.log(b) // 4
-// Associativity is right-to-left
+## Execution Context (Code Execution)
+
+Once the creation phase is complete, the JavaScript engine executes your code line by line, interpreting each statement and running the corresponding instructions.
+
+## Single-Threaded, Synchronous Execution
+
+- **Single-Threaded:** JavaScript executes one command at a time. It has a single call stack to manage function execution.
+- **Synchronous:**  Code is executed in the order it appears in the file. Each line of code must finish executing before the next line begins.
+
+## Function Invocation and the Execution Stack
+
+- **Invocation:** Running a function by using parentheses `()`.
+- **Execution Stack (Call Stack):** A LIFO (Last In, First Out) structure that keeps track of function calls.
+
+1. When a function is invoked, a new execution context for that function is created and pushed onto the execution stack.
+2. The engine executes the code within the function.
+3. If another function is called inside the current function, a new execution context is created and pushed onto the stack.
+4.  When a function finishes executing, its execution context is popped off the stack, and control returns to the context below it.
+
+## Variable Environment
+
+The variable environment is a part of the execution context. It stores the variables and their values that are accessible within that specific context.
+
+## The Scope Chain
+
+Each execution context has a reference to its outer environment, forming a chain-like structure called the scope chain.  
+
+- **Variable Lookup:** When JavaScript encounters a variable, it first searches the current execution context's variable environment. 
+- **Outer Environments:** If the variable is not found, the search continues up the scope chain to outer environments.
+- **Lexical Scoping:** The structure of the scope chain is determined by where functions are defined in the code (their lexical environment).
+
+## Scope
+
+Scope determines the accessibility of variables and functions.  JavaScript primarily has two types of scope:
+
+- **Global Scope:** Variables and functions declared outside of any function have global scope and are accessible from anywhere in the code.
+- **Function Scope:** Variables declared inside a function have function scope and are only accessible within that function.
+
+## `let` and `const` in ES6
+
+ES6 (ECMAScript 2015) introduced `let` and `const` for variable declarations, improving upon the older `var` keyword:
+
+- **Block Scoping:** `let` and `const` have block scope, meaning they are limited to the block of code (defined by curly braces `{}`) in which they are declared.
+- **`let`:** Allows re-assignment of values.
+- **`const`:** Declares constants whose values cannot be re-assigned after initialization.
+
+## Asynchronous Callbacks
+
+- **Asynchronous:** Operations that don't block the execution of other code.  Results are handled later.
+- **Callbacks:** Functions passed as arguments to other functions, intended to be executed when the asynchronous operation completes.
+
+**Example:**
+
+```javascript
+setTimeout(function() {
+  console.log("This runs after 2 seconds"); 
+}, 2000); 
+
+console.log("This runs immediately");
 ```
 
-### Coercion
-Converting a value from one type to another. This happens quite often in Javascript because it's dynamically typed.
+## Dynamic Typing
 
-```JavaScript
-var a = 1 + '2';
-console.log(a); // 12
-// First parameter was coerced the Number 1 into string representation of 1.
+JavaScript is dynamically typed, meaning you don't have to explicitly declare the data type of a variable. The JavaScript engine determines the type at runtime.
 
-console.log(1 < 2 < 3) // 1 < 2 = true; true < 3; 1 < 3; true
+**Advantages:**
+- Flexibility.
+- Faster development.
+
+**Disadvantages:**
+- Potential for runtime type errors.
+- Can make code harder to reason about in large projects.
+
+## Primitive Types
+
+Primitive types represent single values in JavaScript. There are seven primitive types:
+
+1. **`undefined`:** Represents the absence of a value (assigned automatically by JavaScript when a variable is declared but not initialized).
+2. **`null`:** Represents intentional absence of any object value (you set this explicitly).
+3. **`boolean`:** Represents `true` or `false` values.
+4. **`number`:** Represents all numbers in JavaScript (including whole numbers, decimals, and exponents).
+5. **`string`:** Represents text, enclosed in single (`'`) or double (`"`) quotes.
+6. **`symbol`:**  (Introduced in ES6) Unique and immutable values, useful for creating object properties that are guaranteed to be unique.
+7. **`bigint`:** (Introduced in ES2020) Represents integers of arbitrary size.
+
+## Operators
+
+Operators are special symbols or keywords that perform specific operations on values (operands).
+
+**Common Operators:**
+
+- **Arithmetic:**  `+`, `-`, `*`, `/`, `%` (modulo)
+- **Comparison:** `==` (loose equality), `===` (strict equality), `!=` (not equal), `!==` (strict not equal), `>`, `<`, `>=`, `<=` 
+- **Logical:** `&&` (AND), `||` (OR), `!` (NOT)
+- **Assignment:** `=`, `+=`, `-=`, `*=`, `/=`, etc.
+
+## Operator Precedence
+
+Operator precedence determines the order in which operators are evaluated in an expression. Operators with higher precedence are executed before operators with lower precedence.
+
+**Example:**
+
+```javascript
+let result = 5 + 3 * 2; // Multiplication has higher precedence than addition
+console.log(result); // Output: 11 
 ```
 
-It isn't obvious when a type will be coerced. Special cases like undefined and null that won't coerce.
-Equality operators will try to coerce values if their types are different. Strict equality operators will not try to coerce type operators.
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness
+## Operator Associativity
 
-```JavaScript
-// var a will be set as undefined in the creation phase,
-// everything inside an if statement will try to coerce into a boolean. 
-// undefined is coerced as false in boolean statement.
-// when you ask if a value it will return a false when there's nothing assigned, unless it is a 0 Number.
+Associativity determines how operators of the same precedence are grouped together.
 
-var a;
+- **Left-to-right (left-associative):** Most operators in JavaScript are left-associative, meaning they are grouped from left to right.
+- **Right-to-left (right-associative):** Some operators, such as the assignment operator (`=`), are right-associative.
 
-if (a) {
-    console.log('Something is there.');  
-} else {
-    console.log('Nothing is there.');     
-} 
+## Coercion
 
-// "Nothing is there"
+Coercion is the automatic or implicit conversion of a value from one type to another. JavaScript frequently uses coercion in comparisons and operations involving different data types.
+
+**Example:**
+
+```javascript
+let result = 1 + "2"; // Number 1 is coerced to a string
+console.log(result);  // Output: "12" 
 ```
 
-### Default Values
-When you want to safely get a value when it is not defined use the `||` operator.
+**Strict vs. Loose Equality:**
 
-```JavaScript
+- **`===` (Strict Equality):** Checks for both value and type equality without coercion.
+- **`==` (Loose Equality):** Performs type coercion if necessary before comparing values.
+
+## Default Values
+
+- The logical OR operator (`||`) is useful for providing default values:
+
+```javascript
 function greet(name) {
-     // creation phase name will be set as undefined
-     name = name || 'My name'; // The OR operator will return the value that doesn't convert into false
-     console.log('Hello ' + name);
+    name = name || 'Guest'; // If 'name' is undefined or falsy, use 'Guest'
+    console.log('Hello ' + name);
 }
-
-greet(); // Hello My name
-greet('Will') // Hello Will
 ```
 
-### Objects and Functions
-In Javascript Objects and Functions are very related. Objects have properties and methods. You think of an object as sitting in memory and then having references to other things sitting in memory that are connected to.
-`[ ]` computer member access operator. bracket notation. only use if you need to change dynamically the property name.
-`.` dot operator, associativity is left to right, so it looks first for object and then for the property or method.
-`{}` is an object literal, a shorthand. The JS engine assumes you are creating an object. The syntax parser when executing sets in memory an object with properties and methods within.
+## Objects and Functions
 
-```JavaScript
-var person = new Object(); 
-var person = {}; // an object literal, a shorthand. The JS engine assumes you are creating an object.
+- **Objects as Data Structures:** Objects are collections of key-value pairs. Keys are strings (or Symbols), and values can be any data type.
+- **Functions as First-Class Citizens:** In JavaScript, functions are treated as first-class citizens. This means:
+    - Functions can be assigned to variables.
+    - Functions can be passed as arguments to other functions.
+    - Functions can be returned from other functions.
 
-person['firstname'] = 'William' // [ ] computer member access operator. bracket notation. only use if you need to change dynamically the property name.
-person.firstname = 'William' // dot operator, associativity is left to right, so it looks first for object and then for the property or method.
-```
+## First-Class Functions
 
-### Object Literals and JSON
-Json JavaScript Object Notation, it looks a look like Javascript literal notation it is inspired but it is not exact the same. In Json, properties must be wrapped in quotes, and will only accept double quotes. Json has stricter rules.
+First-class functions are a fundamental concept in JavaScript, enabling powerful programming paradigms:
 
-```JavaScript
-var objectLiteral = {
-  firstname: 'Mary',
-  isAProgrammer: true
-}
+- **Functions as Variables:**
+  ```javascript
+  const greet = function(name) {
+    console.log("Hello, " + name + "!");
+  };
 
-console.log(JSON.stringify(objectLiteral)); // {"firstname":"Mary","isAProgrammer":true}
-var jsonValue = JSON.parse('{ "firstname": "Mary", "isAprogrammer": true}');
-console.log(jsonValue); // Object {firstname: "Mary", isAprogrammer: true}
-```
+  greet("Alice"); // Output: Hello, Alice!
+  ```
 
-## Function and Objects
+- **Functions as Arguments (Callbacks):**
+  ```javascript
+  function fetchData(url, callback) {
+    // Simulate fetching data (asynchronous operation)
+    setTimeout(() => {
+      const data = { name: "Bob", age: 30 };
+      callback(data);
+    }, 1000);
+  }
 
-### First Class Functions
-Means that in the programming languange everything you can do with other types you can do with functions, assign them to variables, pass them around, create them on the fly.
+  fetchData("https://example.com/api/user", (userData) => {
+    console.log("User data:", userData);
+  });
+  ```
 
-### Function
-Like any object it resides in memory, it is a special type of object because it has all the features of a normal object and has some other special properties. You can attach properties and methods to a function because it is just an object.
-Function object has some hidden special properties: 
+## Function Statements and Function Expressions
 
-	1. Name, it is optional, it can be anounymous.
-	2. Code, where the actual lines of code written set. It is invocable ().
+- **Function Statement (Declaration):**
+  ```javascript
+  function add(a, b) {
+    return a + b;
+  }
+  ```
+  - Hoisted to the top of their scope.
+  - Can be called before their declaration in the code.
 
-```JavaScript
-function greet() {
-     console.log('hi');
-}
+- **Function Expression:**
+  ```javascript
+  const subtract = function(a, b) {
+    return a - b;
+  };
+  ```
+  - Not hoisted (behave like regular variables).
+  - Must be defined before they are called.
 
-greet.language = 'english';
-console.log(greet.language); // "english"
-// since function is basically an object, you can attach properties to it and then call them.
-```
+## By Value vs. By Reference & Mutation
 
-### Function Statements and Function Expressions
+- **By Value (Primitives):** When you assign a primitive value to a variable, you are creating a copy of that value in memory. Changes to one variable do not affect the other.
 
-`Expression` is a unit of code that results in a value. It doesn't have to save to a variable.
-`Statement` just does work.
+  ```javascript
+  let x = 5;
+  let y = x; 
+  y = 10;
+  console.log(x); // Output: 5
+  console.log(y); // Output: 10 
+  ```
 
-```JavaScript
-var a;
-a = 3 // 3 
-1 + 2 // 3
-// the return or result in both cases is an expression because it returns a value.
-```
+- **By Reference (Objects):** When you assign an object to a variable, you are creating a reference that points to the same object in memory. Changes to one variable will affect the other.
 
-`function statement`, it means that doesn't return anything. When function is running in the execution phase it doesn't do anything, it keeps going.
-`function expression`. We are creating an object on the fly, and setting it equal to the variable, and that variable is set in memory. When this line is executed it results in an object being created, and it returns an object essencially.
+  ```javascript
+  const obj1 = { name: "Eve" };
+  const obj2 = obj1;
+  obj2.name = "Frank";
+  console.log(obj1.name); // Output: Frank
+  console.log(obj2.name); // Output: Frank 
+  ```
 
-```JavaScript
-/*invokes the code. it can be invoked before the creation line since it is a function and everything that's inside it is set in memory. */
-greet() // "hi"
+- **Mutation:**  Modifying the properties or contents of an object is called mutation.  When you pass objects to functions, be mindful of potential mutations.
 
-/* function statement, it means that doesn't return anything */
-function greet() {
-     console.log('hi');
-}
+## Objects, Functions, and 'this'
 
-/* function expression. We are creating an object on the fly, and setting it equal to the variable, and that variable is set in memory. */
-var anonymousGreet = function() {
-     console.log('hi');
-}
+The `this` keyword in JavaScript is a special identifier that refers to the context in which a function is executed. Its value can vary depending on how a function is called.
 
-/* invokes the code. it should be invoked after the creation line since it is a variable and in the creation phase it is set in memory as undefined. */
-anonymousGreet() // "hi"
+- **`this` in Methods:** When a function is called as a method of an object, `this` refers to the object that owns the method.
 
-/* function expression that is passing a function as a paramater to another function and then use it. First Class function Functional programming.
-function log(a) {
-     a();
-}
-
-log(function() {
-     console.log('hi');
-});
-```
-
-### By Value VS By Reference & mutate
-`By Value`: passing or referencing one value as primitive type to another by copying the value , they become the same by copying the value into two separate spots in memory. They are copies of each other sitting in two spots in memory.
-`By Reference`: points to the same location in memory, so when you mutate the value of an object it will also change in the other one that is referencing to.
-`mutate`: to change something, inmutable: it can't be changed
-
-```JavaScript
-// by value (primitives)
-var a = 3;
-var b;
-
-b = a;
-a = 2;
-console.log(a); // 2
-console.log(b); // 3
-
-// by reference (all objects (including functions))
-var c = { greeting: 'hi' };
-var d;
-
-d = c;
-c.greeting = 'hello'; // mutate
-
-console.log(c); // Object { greeting: 'hello'}
-console.log(d); // Object { greeting: 'hello'}
-
-// by reference (even as parameters)
-function changeGreeting(obj) {
-     obj.greeting = 'Hola' // mutate
-}
-
-changeGreeting(d);
-console.log(c); // Object { greeting: 'Hola'}
-console.log(d); // Object { greeting: 'Hola'}
-
-// equals operator sets up new memory space (new address)
-c = { greeting: 'howdy'}
-console.log(c); // Object { greeting: 'howdy'}
-console.log(d); // Object { greeting: 'Hola'}
-```
-
-### Objects, Functions and 'this'
-When a function is invoked, a new execution context is created and put on the execution stack, that determines how the run is executed, so think of execution context as focusing on that code portion. Each execution context has its variable enviroment and has a reference to  its outer enviroment where it sits physically in the code, which tells you how to look down the scope chain.
-The JS engine gives us the 'this' variable each time the execution context is created (a function is run). this will be pointing at different at different objects or things depending on how the function is invoked.
-
-```JavaScript
-console.log(this) // Window
-
-function a() {     
-     console.log(this);
-     this.newVariable = 'hello';
-}
-
-/* the this keyword will be pointing the global object if I invoke the function in the global enviroment */
-a(); // Window
-console.log(newVariable) // 'hello'
-
-var c = {
-     name: 'The c object',
-     log: function() {
-          var self = this; //safely points the same location in memory.
-          this.name = 'Updated c object';
-          console.log(this); 
-          
-          var setname = function(newname) {
-              this.name = newname; 
-          }
-          setname('Updated again! The c object!'); // the name var is created in the global object and not in the c object.
-          console.log(this); // Object {name: "Updated c object", log: function}
-     }
-}
-
-c.log(); // Object {name: "Updated c object", log: function}
-```
-
-### Arrays, Collections of Anything
-An array is a collection and can hold many things. Since JS is dynamically typed it can collect whatever I want.
-
-```JavaScript
-var arr = [
-     1,
-     false,
-     {
-          name: 'Will',
-          address: '111 Main St.'
-     },
-     function(name) {
-          var greeting = 'Hello ';
-          console.log(greeting + name);
-     }
-];
-
-arr[3](arr[2].name); // 'Hello Will'
-```
-
-### Arguments and Spread
-When you execute a function arguments is a special keyword that javascript sets up automatically.
-Arguments are the parameters you pass to a function. Javascript gives you a keyword of that same name which contains them all.
-
-```JavaScript
-function greet(firstname, lastname, language) {
-
-    language = language || 'en';
-
-    if (arguments.length === 0) {
-        console.log('Missing parameters!');
-        console.log('-------------');
-        return;
+  ```javascript
+  const myObject = {
+    name: "My Object",
+    greet: function() {
+      console.log("Hello from " + this.name);
     }
+  };
 
-    console.log(firstname);
-    console.log(lastname);
-    console.log(language);
-    console.log(arguments);
-    console.log('arg 0: ' + arguments[0]);
-    console.log('-------------');
+  myObject.greet(); // Output: Hello from My Object
+  ```
 
-}
+- **`this` in Constructors:** When a function is used as a constructor with the `new` keyword, `this` refers to the newly created object.
 
-greet(); // 'Missing parameters -------
-greet('John'); // John undefined en ["John"] arg 0: John ----
-greet('John', 'Doe');  // John Doe en ["John"] arg 0: John ----
-greet('John', 'Doe', 'es'); // John Doe es ["John"] arg 0: John ----
+  ```javascript
+  function Car(brand) {
+    this.brand = brand;
+  }
 
-// in ES6 I can do:  function greet(firstname, ...other)
-// and 'other' will be an array that contains the rest of the arguments
-```
+  const myCar = new Car("Ford");
+  console.log(myCar.brand); // Output: Ford
+  ```
 
-### Automatic Semicolon insertion
-The syntax parser inserts semicolon where it is expecting one. For some particular statements it will put for you and can break the code. You should always write semicolons.
+- **`this` in Global Context:** In the global execution context (outside of any function), `this` refers to the global object (usually `window` in web browsers).
 
-```JavaScript
-function getPerson () {
-     return 
-     {
-          firstname: 'Will'
-     }
-}
+## Arrays: Collections of Anything
 
-console.log(getPerson()); // undefined
-// The JS engine automatically inserted a semicolon after the return statement, meaning it quit out of the function.
-```
+Arrays in JavaScript are ordered collections that can hold elements of any data type.
 
-### Whitespace
-Invisible characters that create literal "space" in your written code, carriage returns, tabs, spaces.
+- **Creating Arrays:**
+  ```javascript
+  const numbers = [1, 2, 3, 4, 5];
+  const mixedArray = [10, "hello", true, { name: "Grace" }];
+  ```
 
-### IIFFe Inmediately Invoked Function Expression
-You can safely create variables without colliding with another same name variables since those are created on a different execution context
+- **Accessing Elements:**  Array elements are accessed using zero-based indexing.
+  ```javascript
+  console.log(numbers[0]); // Output: 1
+  ```
 
-### Closures
-A feature of the Javascript language .
-When the code of a function inside another function is invoked, it goes up the scope chain to its outer lexical environment to look for a variable that does not exist inside that inner function. An inner function will have a reference to its outer environment even though the execution of the outer enviroment is cleared out.
-It doesn't matter when we invoke a function or its outer enviroment is still running, it will always have access to the variables it should have access to.
+- **Array Methods:** JavaScript provides a rich set of built-in methods for working with arrays (e.g., `push()`, `pop()`, `slice()`, `map()`, `filter()`, `reduce()`).
 
-```JavaScript
-function greet(whattosay) {
-     return function(name) {
-         console.log(whattosay + ' '  + name);
-     }
-}
-var sayHi = greet('Hi');
-sayHi('Will'); // "Hi Will"
-```
+## Arguments and Spread
 
-### Function Factory making advantage of Closures
-Since the function makeGreeting each time is invoked, it creates a new execution context, in this case one with language parameter as 'en' and the other as 'es' those variables are stored in memory and when you invoke the inner function of each invoked function, you will still have access to the variables outside, in this case the language.
+- **`arguments` Object:** Inside a function, the `arguments` object is an array-like object that contains all the arguments passed to the function.
 
-```JavaScript
-function makeGreeting(language) {
-    return function(firstname, lastname) {
-        if (language === 'en') {
-            console.log('Hello ' + firstname + ' ' + lastname);   
-        }
-        if (language === 'es') {
-            console.log('Hola ' + firstname + ' ' + lastname);   
-        }
+  ```javascript
+  function sum() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+      total += arguments[i];
     }
-}
-
-var greetEnglish = makeGreeting('en');
-var greetSpanish = makeGreeting('es');
-
-greetEnglish('John', 'Doe');
-greetSpanish('John', 'Doe');
-```
-
-### Callback Function
-A function you give to another function, to be run when the ohter function is finished, so the function you invoke 'calls back' by calling the function you gave it when it finishes.
-
-```JavaScript
-function tellMeWhenDone(callback) {
-     var a = 1000;
-     var b = 2000;
-     callback();
-}
-
-tellMeWhenDone(function() {
-     console.log('I am done');
-});
-```
-
-### Promises
-A Promise is an object representing the eventual completition or failure of an asynchronous operation. We can attach callbacks to promises instead of passing them into a function. It has two parameters, resolve and reject which are functions. We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed. Every Promise has a then() method that will run if our promise is resolved. The catch() method will run if the promise is rejected.
-
-```JavaScript
-let myFirstPromise = new Promise((resolve, reject) => {
-  setTimeout( function() {
-    resolve("Success!");
-  }, 250) 
-}) 
-
-myFirstPromise.then((successMessage) => {
-  console.log("Yay! " + successMessage) // "Yay! Success!"
-});
-```
-
-
-### Call() Apply() Bind()
-On each execution context we have a variable enviroment, outer enviroment and 'this'. This keyword can point the global object sometimes or can point the object that contains the function if the function is a method attach to an object. To be able to control what the this variable ends up meaining when the execution context is created.  All functions are objects and have access to methods call, apply bind.
-
-Bind() creates copy of whatever function calling, and whatever object you pass to this method, its what this variable points to by reference:
-Apply and Call invokes the function setting extra parameters, call as strings, apply as array.
-
-```JavaScript
-var person = {
-  firstname: 'Will',
-  lastname: 'Doe',
-  getFullName: function() {
-    var fullname = this.firstname + ' ' + this.lastname;
-    return fullname;
+    return total;
   }
-}
 
-var logName = function(lang1, lang2){
-  console.log('Logged: ' + this.getFullName());
-  console.log('Arguments: ' + lang1 + ' ' + lang2);
-  console.log('------------');
-}
+  console.log(sum(1, 2, 3, 4)); // Output: 10
+  ```
 
-//creates new copy
-var logPersonName = logName.bind(person);
-logPersonName('en');
+- **Spread Syntax (`...`):** ES6 introduced the spread syntax, which allows you to expand an iterable (like an array) into its individual elements.
 
-//call will execute the function first parameter is this, and then pass pararameters
-logName.call(person, 'en', 'es');
+  ```javascript
+  const numbers1 = [1, 2, 3];
+  const numbers2 = [4, 5, 6];
 
-//call will execute the function first parameter is this, and then pass array of params
-logName.apply(person, ['en', 'es']);
+  const combined = [...numbers1, ...numbers2]; 
+  console.log(combined); // Output: [1, 2, 3, 4, 5, 6]
+  ```
 
-//function borrowing
-var person2 = {
-  firstname: 'Jane',
-  lastname: 'Doe'
-}
+## Automatic Semicolon Insertion (ASI)
 
-console.log(person.getFullName.apply(person2)); // Jane Doe
+JavaScript has a feature called Automatic Semicolon Insertion, which attempts to insert semicolons automatically where it thinks they are missing. While this can be convenient, it can sometimes lead to unexpected behavior. 
 
-// function currying
-function multiply (a, b) {
-  return a*b;
-}
+**Best Practice:** It's considered best practice to always include semicolons at the end of your JavaScript statements to avoid potential ASI issues.
 
-//giving a permanent value
-var multypleByTwo = multiply.bind(this, 2);
-multypleByTwo(3) //6
+## Whitespace
+
+Whitespace refers to spaces, tabs, and newline characters in your code. While JavaScript largely ignores whitespace, consistent indentation and spacing improve code readability and maintainability.
+
+## IIFE: Immediately Invoked Function Expression
+
+An IIFE is a function expression that is executed as soon as it is defined. It's commonly used to create a private scope for variables and avoid polluting the global scope.
+
+```javascript
+(function() {
+  // Code inside the IIFE
+  let privateVariable = "This is private!";
+})();
+
+// console.log(privateVariable); // Error: privateVariable is not defined
 ```
 
-### Function Currying
-Creating a copy of a function but with some preset parameters. Very useful in mathematical situations.
+## Closures
 
-### Functional Programming
-Having first class functions we can apply functional programming. Whe think and code in ways of function.
+A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment).  Closures give functions the ability to "remember" and access variables from their lexical scope, even after the outer function has finished executing.
 
-```JavaScript
-function mapForEach(arr, fn) {
-  var newArr = [];
-  for (var i = 0; i < arr.length; i++) {
-    newArr.push(
-      fn(arr[i])
-    )
+**Example:**
+
+```javascript
+function makeCounter() {
+  let count = 0; 
+  return function() {
+    return count++;
+  };
+}
+
+const counter1 = makeCounter();
+const counter2 = makeCounter();
+
+console.log(counter1()); // Output: 0
+console.log(counter1()); // Output: 1
+console.log(counter2()); // Output: 0 (counter2 has its own independent count)
+```
+
+## Function Factory: Making Advantage of Closures
+
+A function factory leverages closures to create new functions with customized behavior. Each function generated by the factory has its own isolated scope, preserving the values passed during creation.
+
+**Example:**
+
+```javascript
+function createMultiplier(factor) {
+  return function(number) {
+    return number * factor;
+  };
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+
+console.log(double(5));  // Output: 10
+console.log(triple(5));  // Output: 15
+```
+
+## Callback Functions
+
+A callback function is a function that is passed as an argument to another function, with the intention of being called back later. Callbacks are frequently used in asynchronous operations (like timers, event handling, and AJAX requests) to provide a way to handle the result of an operation once it completes.
+
+**Example:**
+
+```javascript
+function greetAfterDelay(name, delay, callback) {
+  setTimeout(() => {
+    const message = `Hello, ${name}!`;
+    callback(message);
+  }, delay);
+}
+
+greetAfterDelay("Henry", 1500, (greeting) => {
+  console.log(greeting); // Output (after 1.5 seconds): Hello, Henry!
+});
+```
+
+## Promises
+
+A Promise is an object that represents the eventual outcome of an asynchronous operation. It can be in one of three states:
+
+1. **Pending:** The initial state, neither fulfilled nor rejected.
+2. **Fulfilled:** The asynchronous operation completed successfully.
+3. **Rejected:** The asynchronous operation failed.
+
+Promises provide a cleaner and more manageable way to handle asynchronous operations compared to traditional callback functions.
+
+**Example:**
+
+```javascript
+function fetchData(url) {
+  return new Promise((resolve, reject) => {
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); 
+      })
+      .then(data => {
+        resolve(data); // Fulfill the promise with the fetched data
+      })
+      .catch(error => {
+        reject(error); // Reject the promise if there's an error
+      });
+  });
+}
+
+fetchData('https://api.example.com/data')
+  .then(data => {
+    console.log('Data:', data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+```
+
+## `call()`, `apply()`, and `bind()`
+
+These methods provide control over the `this` keyword in JavaScript functions.
+
+- **`call()`:** Invokes a function immediately, explicitly setting the value of `this`.
+
+  ```javascript
+  function greet(greeting) {
+    console.log(greeting + ", " + this.name + "!");
   }
-  return newArr;
-}
 
-var arr1 = [1, 2, 3];
-console.log(arr1); //[1, 2, 3]
+  const person = { name: "Isabella" };
 
-var arr2 = mapForEach(arr1, function(item){
-  return item * 2;
-});
+  greet.call(person, "Hello");  // Output: Hello, Isabella!
+  ```
 
-console.log(arr2); //[2, 4, 6]
+- **`apply()`:** Similar to `call()`, but it accepts the arguments to be passed to the function as an array.
 
-var arr3 = mapForEach(arr1, function(item) {
-  return item > 2;
-});
-console.log(arr3); //[false, false, true]
-
-var checkPastLimit = function(limiter, item) {
-  return item > limiter;
-}
-
-var arr4 = mapForEach(arr1, checkPastLimit.bind(this, 1));
-console.log(arr4); //[false, true, true]
-
-var checkPastLImitSimplified = function(limiter) {
-  return function(limiter, item) {
-    return item > limiter;
-  }.bind(this, limiter);
-}
-
-var arr5 = mapForEach(arr1, checkPastLImitSimplified(2));
-console.log(arr5); //[false, false, true]
-```
-
-## Object-oriented Javascript and prototypical inheritance
-
-### Inheritance:
-One object gets access to the properties and methods of another object.
-
-### Prototype
-All objects (including functions) have a prototype property. A property that is a reference to another object. proto {}. This object has other objects. The prototype can be chained to another prototype and so on. So when I try to look for obj.prop2, if JS doesn't find it in the main object it will look for the property in it's prototype, and so on. And that's called the Prototype Chain, when you have access to properties or methods in a secuence of objects.
-If I have another object "obj2", it can point to the same object in it's prototype. Calling obj2.prop2 will return the same exact property in memory than obj.prop2.
-
-```JavaScript
-var person = {
-  firstname: 'Default',
-  lastname: 'Default',
-  getFullName: function() {
-    return this.firstname + ' ' + this.lastname;
+  ```javascript
+  function sum(a, b) {
+    return a + b;
   }
+
+  const numbers = [5, 10];
+
+  console.log(sum.apply(null, numbers)); // Output: 15
+  ```
+
+- **`bind()`:** Creates a new function that, when called, has its `this` keyword set to the provided value.
+
+  ```javascript
+  const logName = function() {
+    console.log(this.name);
+  };
+
+  const obj = { name: "My Object" };
+
+  const boundLogName = logName.bind(obj);
+  boundLogName(); // Output: My Object 
+  ```
+
+## Function Currying
+
+Function currying is a technique where a function that takes multiple arguments is transformed into a sequence of nested functions that each take a single argument. Curried functions improve code clarity, reusability, and partial application.
+
+**Example:**
+
+```javascript
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    } else {
+      return (...nextArgs) => curried.apply(this, [...args, ...nextArgs]);
+    }
+  };
 }
 
-var john = {
-  firstname: 'John',
-  lastname: 'Doe'
+function add3(x, y, z) {
+  return x + y + z;
 }
 
-//don't do this ever
-john.__proto__ = person;
-console.log(john.getFullName()); //John Doe
-console.log(john.firstname) //John (first looks at the top of the chain)
+const curriedAdd3 = curry(add3);
+console.log(curriedAdd3(1)(2)(3)); // Output: 6
+console.log(curriedAdd3(1, 2)(3));  // Output: 6
+console.log(curriedAdd3(1, 2, 3));   // Output: 6
 ```
 
-### Everything is an object (or a primitive)
-Functions, arrays and basic objects all have a prototype, except one thing, the base object in javascript.
+## Functional Programming
 
-```JavaScript
-var a = {};
-var b = function() {};
-var c = [];
+Functional programming is a paradigm that emphasizes:
 
-a__proto__ //Object {} //the very bottom of the prototype chain
-b__proto__ //function Empty() {}
-c.__proto__ //[]
-```
+- **Pure Functions:**  Functions that always produce the same output for the same input and have no side effects.
+- **Immutability:** Avoiding changing data in place; instead, creating new data structures with the desired modifications.
+- **Higher-Order Functions:** Functions that can take other functions as arguments or return functions.
 
-### Reflection
-An object can look at itself, listing and changing its properties and methods.
+JavaScript supports functional programming concepts, which can lead to more predictable and maintainable code.
 
-```JavaScript
-// continue from previous example
+## Object-Oriented JavaScript and Prototypal Inheritance
 
-for (var prop in john) {
-     console.log(prop + ': ' + john[prop]); // reachs out every property on the object and object's prototype
-     if (john.hasOwnProperty(prop)) {
-          console.log(prop + ': ' + john[prop]); // reachs out every property on the object only          
-     }
+Object-oriented programming (OOP) is a programming paradigm that organizes code around objects, which are instances of classes. JavaScript uses a prototype-based inheritance model, which is different from class-based inheritance found in languages like Java or C++.
+
+## Inheritance
+
+Inheritance allows objects to inherit properties and methods from other objects, promoting code reuse and a hierarchical structure.  In JavaScript, inheritance is achieved through prototypes.
+
+## Prototype
+
+Every object in JavaScript has a prototype, which is another object it can inherit properties and methods from.
+
+- **`__proto__`:** The `__proto__` property (deprecated but still widely supported) provides a reference to an object's prototype.
+- **Prototype Chain:** When you try to access a property or method on an object, JavaScript first checks if the object itself has it. If not, it looks up the prototype chain to the object's prototype, and so on, until it either finds the property/method or reaches the end of the chain.
+
+## Everything is an Object (or a Primitive)
+
+In JavaScript, almost everything is an object, except for the primitive data types. Even functions are objects.  This object-oriented nature of JavaScript allows for great flexibility.
+
+## Reflection
+
+Reflection in JavaScript allows you to inspect and modify objects at runtime.
+
+- **`for...in` loop:** Iterates over the enumerable properties of an object.
+
+  ```javascript
+  const myObj = { a: 1, b: 2, c: 3 };
+
+  for (const property in myObj) {
+    console.log(`${property}: ${myObj[property]}`);
+  }
+  ```
+
+- **`hasOwnProperty()`:** Checks if an object has a specific property as its own property (not inherited from its prototype).
+
+  ```javascript
+  console.log(myObj.hasOwnProperty('a')); // Output: true
+  ```
+
+## Function Constructors, 'new', and JavaScript History
+
+Before ES6 classes were introduced, function constructors were a common way to create objects that shared similar properties and methods.  The `new` keyword is used with a function constructor to create new objects.
+
+**Example:**
+
+```javascript
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
 }
+
+Person.prototype.sayHello = function() {
+  console.log(`Hello, my name is ${this.name}.`);
+};
+
+const person1 = new Person("Jack", 30);
+person1.sayHello(); // Output: Hello, my name is Jack.
 ```
 
-### Function Constructors 'new' and the history of javascript
-Brandon Ike designed Javascript for marketing purposes, trying to bring Java developers to work inside JS. One of the element of this marketing strategy was the 'new' and a Class. A Class in Java is not an object but it defines that object, and use the new keyword to create the object from that Class. JS doesn't have classes per se, but needed a way to be able to create objects with that kind of syntax.
+## Setting the Prototype in Function Constructors
 
-```JavaScript
-function Person(firstname, lastname) {
-  console.log(this) //Person {}
-  this.firstname = firstname;
-  this.lastname = lastname;
-}
+When you create objects using a function constructor and the `new` keyword, you can add properties and methods to the constructor's `prototype` property.  These will be inherited by all objects created from that constructor.
 
-var john = new Person('John', 'Doe');
-console.log(john); //Person {  firstname: "John", lastname: "Doe" }
-// the new creates an empty object and the this.firstname and this.lastname is now pointing to that empty object.
-```
+## Strict Mode
 
-The new keyword is an operator. When we say new, inmediately an empty object is created, and then it invokes the function. when the function is called we know that execution context generates for us a variable called 'this'. In the case where you use the keyword new, it changes to where the variable this points to and that's what's returned.
+Strict mode introduces stricter parsing and error handling rules in JavaScript. It helps to catch common coding mistakes and "silent errors" that would otherwise fail silently.
 
-### Function Constructors
-A normal function that is used to construct objects. The 'this' variable points a new empty object, and that object is returned from the function automatically.
+- **Enable Strict Mode:** You can enable strict mode globally by adding `"use strict";` at the top of your script or locally within a function.
 
-### Setting the prototype in function constructors
-When you use a function constructor, it already set the prototype for you. Function is an object, it can have a name, it has code which is invocable, and all functions has its prototype created as an empty object but it is never used unless you use the new keyword. The prototype is not the prototype of the function, it is the prototype of any objects created if your using the function as a constructor.
-All functions get the prototype property, its starts its life as an empty object and you can addon to it. The prototype chain is that every object has this special property that points to another object that is its prototype so it looks for properties and methods down that chain. When you call the new keyword it creates an empty object and sets the prototype of that empty object to the prototype property of the function you then called. Every objects you create using this function constructor means that the object thererfore created has a prototype and properties and methods.
+  ```javascript
+  "use strict";
 
-```JavaScript
-Person.prototype.getFullName = function() {
-  return this.firstname + ' ' + this.lastname;
-}
-```
+  // Your code here
+  ```
 
-In good code properties are set inside the function, and methods in the prototype. Functions are objects and take up memory space, so every time you add a function inside the function it means that every object has its own copy of that function, but if it is set to the prototype you will only have one. 
+## NaN (Not a Number)
 
+`NaN` is a special value in JavaScript that represents an invalid numerical operation.
 
------
+- **Checking for `NaN`:** Use `isNaN()` to check if a value is `NaN`.
 
-### Strict Mode
-Allows to play a program or a function in a strict operating context, it makes debugging easier. This alerts problem in your code. It is a string. 
+  ```javascript
+  console.log(isNaN(NaN)); // Output: true
+  console.log(isNaN(10)); // Output: false
+  ```
 
-```JavaScript
-// Using a variable undeclerared causes an error:
-myNumber = 1; // error in strict mode
+## CORS (Cross-Origin Resource Sharing)
 
-// Stops you from using words that are reserved for future javascripts:
-var let = 1; // error
+CORS is a mechanism that allows resources from one origin (domain, protocol, port) to access resources from a different origin. It's a security measure implemented by web browsers to prevent malicious websites from making unauthorized requests to other websites.
 
-// You can't delete functions, variables or function arguments in strict mode:
-var foor = 1;
-delete foo; // error
+## JSONP (JSON with Padding)
 
-// Makes eval keyword safer.
-```
+JSONP is a technique used to bypass the same-origin policy restriction for making cross-origin requests. It works by exploiting the fact that `<script>` tags can load resources from different origins. JSONP is generally considered less secure than CORS and is not as widely used today.
 
-### NaN
-The correct way to to know if something is NaN is by comparing if NaN is NaN.
-Since NaN is the only javascript value that is treated unequal to itself then and only then, it will be actually NaN.
+## DOM (Document Object Model)
 
-```JavaScript
-NaN === NaN // false
-```
+The DOM is a programming interface for HTML and XML documents. It represents the page as a tree of objects, allowing you to access and manipulate the content, structure, and style of a webpage using JavaScript.
 
-### CORS 
-Stands for Cross Origin Resource sharing. Allows you tu break the same origin policiy of a browser.
-The Origin header is always sent by the browser on a CORS request.
-The Acesss-Control-Allow-Origin header needs the be present on a CORS response to a GET request for the browser to allow a request to pass through.
-If we were making a POST CORS request, the OPTIONS HTTP request the browser sends first.
-Access-Control-Request-Method would be an acceptable response for the browser to allow the POST request
+## Methods to Select DOM Elements
 
+- **`getElementById()`:** Selects an element by its unique ID.
+- **`getElementsByTagName()`:** Selects a collection of elements by their tag name.
+- **`getElementsByClassName()`:** Selects a collection of elements by their class name.
+- **`querySelector()`:** Selects the first element that matches a given CSS selector.
+- **`querySelectorAll()`:**  Selects all elements that match a given CSS selector.
 
-### JSONP
-It is a solution for the same-origin policy. It was created to retrieve from different domain. It only works with GET request. You get a response as a function.
+## Methods to Manipulate the DOM
 
+- **`innerHTML`:** Gets or sets the HTML content of an element.
+- **`textContent`:**  Gets or sets the text content of an element (without HTML tags).
+- **`classList`:** Provides methods for adding, removing, and toggling CSS classes on an element.
+- **`setAttribute()`:** Sets the value of an attribute on an element.
+- **`getAttribute()`:** Gets the value of an attribute on an element.
+- **`appendChild()`:**  Adds a child node to an element.
+- **`removeChild()`:**  Removes a child node from an element.
+- **`createElement()`:** Creates a new HTML element.
+- **`style`:** Accesses the inline styles of an element.
 
------
+## DOM Events
 
-### DOM
+Events are actions or occurrences that happen in the browser that JavaScript can detect and respond to. Common events include:
 
-DOM stands for Document Object Model. It is a JavaScript representation of the content of a webpage. It is a bunch of objects representing all the HTML and CSS of the webpage that you can interact with via JS. Each node inside the webpage gets converted by the browser into ojects, each with their own properties and methods, and they are assembled into a tree with different branches, each tree has a top piece which is called the root of the tree.
+- **`click`:**  Triggered when an element is clicked.
+- **`mouseover`:**  Triggered when the mouse cursor hovers over an element.
+- **`submit`:**  Triggered when a form is submitted.
+- **`load`:**  Triggered when a page has finished loading.
 
+You can use the `addEventListener()` method to attach event listeners to elements.
 
-### Methods to select the DOM
+## Event Bubbling & Event Capturing
 
-getElementById, getElementsByTagName, getElementsByClassName, querySelector, querySelectorAll
+- **Event Bubbling:** When an event is triggered on an element, it first runs the handlers on that element, then on its parent element, then all the way up the DOM tree.
+- **Event Capturing:**  The event travels down the DOM tree from the root element to the target element.
 
-```JavaScript
-document.getElementById('id') // returns an oject with the same ID
-document.getElementsByTagName('tag') // returns a full collection of types of elements selected
-document.getElementsByClassName('class') // returns a collection of elements that contains the selected class
-document.querySelector(el) // returns a single element that is passed in a CSS selector
-document.querySelectorAll(el) // returns a collection of elements that are passed in a CSS selector
-```
+## `stopPropagation()` & `preventDefault()`
 
-### Methods to manipulate the DOM
-
-classList, getAttribute(), setAttribute(), appendChild(), append(), prepend(), removeChild(), remove(), createElement, innerText, textContent, innnerHTML, value, parentElement, children, nextSibling, previousSibling, style,
-
- ```JavaScript
-document.querySelector('h1').innerText // returns all the text in between the tags.
-document.querySelector('h1').innerText = 'new text' // sets new text inside the selected element.
-document.querySelector('h1').classList // returns a collection of classes contained inside the element.
-document.querySelector('h1').classList.add('new-class') // adds class to the collection inside the element.
-```
-
-### DOM events
-
-addEventListener attaches any type of event listener (click, mouseover, drag, etc.), and will attach as many as we want to a given element.
-
- ```JavaScript
-btn = document.querySelector('btn');
-btn.addEventListener('click', function(e) {
-	alert('clicked');
-	e.preventDefault();
-});
-```
-Each event passes an event object as a parameter that has access to different properties and methods.
-
-### Event Bubbling & Event Capturing
-
-When you click on something, it's actually two phases that that event travels to. The first phase is the Capturing phase where the event travels from the root to the target (button), the second phase is the Bubbling phase in which the event travels back from the target to the root again. You can add event listeners that listen to that phases independently, the last parameter is a boolean, and if set true it listens for events on the capturing phase, if set to false it listens to the bubbling phase, as default is set to false (bubbling).
-
-```JavaScript
-var items = document.querySelectorAll('.item');
-items.forEach(function(item){
-  item.addEventListener('click', function (event) {
-    console.log(item.classList[0]);
-  }, true);
-});
-```
-
-### stopPropagation() & preventDefault()
-
-stopPropagation actually stops the event from either presiding down the capturing phase or going up the event bubbling phase and no listeners will be called after the event has called to stop propagating.
-
-preventDefault stops the default behavior that that event would have triggered in whatever element you performed the event on (link, checkbox, etc).
-
-
+- **`event.stopPropagation()`:** Prevents an event from bubbling up the DOM tree, stopping it from triggering listeners on ancestor elements.
+- **`event.preventDefault()`:** Prevents the default action of an event (e.g., prevents a link from navigating to its URL).
