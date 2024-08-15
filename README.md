@@ -43,6 +43,7 @@ This document provides a comprehensive overview of core JavaScript concepts. Whe
 - [Function Factories and Closures](#function-factory-making-advantage-of-closures)
 - [Callback Functions](#callback-functions)
 - [Promises](#promises)
+- [Event Loop](#the-event-loop)
 - [call(), apply(), and bind()](#call-apply-and-bind)
 - [Function Currying](#function-currying)
 - [Functional Programming](#functional-programming)
@@ -597,6 +598,140 @@ example();
 // (2 seconds later)
 // After 2 seconds
 ```
+
+## The Event Loop
+The event loop is a fundamental concept in JavaScript that enables non-blocking, asynchronous execution. It's the mechanism that allows JavaScript, which is single-threaded, to perform non-blocking operations.
+
+How the Event Loop Works
+
+1. Call Stack: 
+   - The call stack is where JavaScript keeps track of function calls.
+   - When a function is called, it's added to the stack.
+   - When a function returns, it's removed from the stack.
+
+2. Callback Queue (Task Queue):
+   - Asynchronous operations (like setTimeout, Promise resolutions, or DOM events) add their callback functions to the callback queue when they're ready to be executed.
+
+3. Microtask Queue:
+   - Similar to the callback queue, but for microtasks like Promise callbacks.
+   - Microtasks have higher priority than regular tasks.
+
+4. Event Loop:
+   - Continuously checks if the call stack is empty.
+   - If empty, it first processes all microtasks.
+   - Then, it takes the first task from the callback queue and pushes it to the call stack for execution.
+
+1. Basic Event Loop Demonstration
+
+```javascript
+console.log('Start');
+
+setTimeout(() => {
+  console.log('Timeout 1');
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('Promise 1');
+});
+
+console.log('End');
+
+// Output:
+// Start
+// End
+// Promise 1
+// Timeout 1
+```
+
+- 'Start' and 'End' are logged immediately.
+- The setTimeout callback is added to the callback queue.
+- The Promise resolution is added to the microtask queue.
+- After the call stack is empty, the microtask (Promise) is executed.
+- Finally, the setTimeout callback is executed.
+
+2. Microtasks vs Macrotasks
+
+```javascript
+console.log('Script start');
+
+setTimeout(() => {
+  console.log('setTimeout');
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('Promise 1');
+}).then(() => {
+  console.log('Promise 2');
+});
+
+console.log('Script end');
+
+// Output:
+// Script start
+// Script end
+// Promise 1
+// Promise 2
+// setTimeout
+```
+
+- Synchronous code runs first ('Script start' and 'Script end').
+- The Promise callbacks (microtasks) are executed before the setTimeout callback (macrotask).
+
+3. Demonstrating the Non-Blocking Nature
+
+```javascript
+console.log('Starting long operation');
+
+setTimeout(() => {
+  let sum = 0;
+  for(let i = 0; i < 1000000000; i++) {
+    sum += i;
+  }
+  console.log('Long operation finished');
+}, 0);
+
+console.log('Continuing with other tasks');
+
+// Output:
+// Starting long operation
+// Continuing with other tasks
+// (after a delay) Long operation finished
+```
+
+- The long operation is scheduled to run asynchronously.
+- The script continues executing without waiting for the long operation to complete.
+
+4. Mixing Async Operations
+
+```javascript
+console.log('Start');
+
+setTimeout(() => {
+  console.log('Timeout 1');
+  Promise.resolve().then(() => {
+    console.log('Promise inside Timeout');
+  });
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('Promise 1');
+  setTimeout(() => {
+    console.log('Timeout inside Promise');
+  }, 0);
+});
+
+console.log('End');
+
+// Output:
+// Start
+// End
+// Promise 1
+// Timeout 1
+// Promise inside Timeout
+// Timeout inside Promise
+```
+
+- Microtasks queued during the execution of a task are processed before the next task is taken from the macrotask queue.
 
 ## `call()`, `apply()`, and `bind()`
 
