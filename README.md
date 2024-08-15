@@ -562,6 +562,42 @@ fetchData('https://api.example.com/data')
   });
 ```
 
+### Async/Await
+ES2017 introduced async/await, which is syntactic sugar built on top of Promises, making asynchronous code even easier to write and read.
+The async and await keywords enable asynchronous, promise-based behavior to be written in a cleaner style, avoiding the need to explicitly configure promise chains.
+
+1. async Functions
+An async function is a function that implicitly returns a Promise. You can use the async keyword before a function declaration to define an async function.
+
+```javascript
+async function fetchData() {
+  return "Data fetched";
+}
+
+fetchData().then(data => console.log(data)); // Output: Data fetched
+```
+
+2. await Keyword
+The await keyword can only be used inside an async function. It pauses the execution of the async function until the Promise is resolved.
+
+```javascript
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function example() {
+  console.log("Start");
+  await delay(2000); // Waits for 2 seconds
+  console.log("After 2 seconds");
+}
+
+example();
+// Output:
+// Start
+// (2 seconds later)
+// After 2 seconds
+```
+
 ## `call()`, `apply()`, and `bind()`
 
 These methods provide control over the `this` keyword in JavaScript functions.
